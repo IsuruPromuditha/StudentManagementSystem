@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Students Details</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous" />
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+  <link rel="stylesheet" href="css/style1.css" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <style>
+  body {
+    background-image: url("images/background.jpg");
+    background-repeat: no-repeat;
+    background-size: auto;
+    background-color: #a3a2a2bb;
+  }
+</style>
+  <script>
+
+    //show student by id
+    function showStudent() {
+      $.ajax({
+        url: 'http://localhost:3000/api/student/' + $('#SId').val(), type: 'get',
+        contentType: 'application/json',
+        dataType: "json",
+        success: function (data, textStatus, jQxhr) {
+          $("#sid-form2").val(data.StudentId),
+            $("#Fname-form2").val(data.FirstName),
+            $("#Lname-form2").val(data.LastName),
+            $("#email-form2").val(data.email),
+            $("#city-form2").val(data.city),
+            $("#course-form2").val(data.course),
+            $("#guardian-form2").val(data.guardian),
+            $("#subject-form2").val(data.subject)
+        },
+        error: function (jqXhr, textStatus, errorThrown) {
+          alert(`Student Id: ${$('#SId').val()} not found`);
+          console.log(errorThrown);
+        }
+      });
+    }
+
+    //update student by id
+    $(document).ready(function () {
+      $("#updateBtn").click(function () {
+        $.ajax({
+          type: 'PUT',
+          url: 'http://localhost:3000/api/student/' + $('#sid-form2').val(),
+          contentType: 'application/json',
+          data: JSON.stringify(
+            {
+              "StudentId": $("#sid-form2").val(),
+              "FirstName": $("#Fname-form2").val(),
+              "LastName": $("#Lname-form2").val(),
+              "email": $("#email-form2").val(),
+              "city": $("#city-form2").val(),
+              "course": $("#course-form2").val(),
+              "guardian": $("#guardian-form2").val(),
+              "subject": $("#subject-form2").val()
+            }),
+          success: function (data, textStatus, jQxhr) {
+            alert("Data updated");
+
+          },
+          error: function (xhr, textStatus, error) {
+            alert("Error");
+          }
+        });
+      });
+    });
+  </script>
+</head>
+
+<body class="body-bg">
+
+  <header class="header-area header-sticky">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <nav class="main-nav">
+                    
+                  <a href="Homepage.html" class="logo">FACTS<em> Net Academy</em></a>
+                    
+                    
+                    <ul class="nav">
+                        <li class="nav-link"><a href="Homepage.html" >Home</a></li>
+                        <li class="nav-link"><a href="Show.html">Show Students</a></li>
+                        <li class="nav-link"><a href="Insert.html">Add Student</a></li>
+                        <li class="nav-link"><a href="Update.html">Update Student</a></li>
+                        <li class="main-button"><a href="login.html">Sign Up</a></li>
+                    </ul>        
+                   
+                    
+                </nav>
+            </div>
+        </div>
+    </div>
+</header>
+
+<div class="container " style="margin-top: 15vh; margin-bottom: 15vh; padding-bottom: 5vh;">
+    <br>
+    <div class="row justify-content-center align-items-center text-center">
+      <div class="col-lg-8 p-10 w-50 ">
+        <h2 class="my-3 text-center">Update Student Details</h2>
+        <div>
+          <input type="text" class="form-control p-3 shadow-none rounded-pill" id="SId" placeholder="Enter StudentID">
+          <br>
+          <input type="button" class="btn btn-primary p-3 btn-custom shadow-none rounded-pill w-50"
+            value="Show student details" onclick="showStudent()">
+        </div>
+        <br>
+        <div class="mb-3">
+          <input type="text" class="form-control p-3 shadow-none rounded-pill" id="sid-form2"
+            placeholder="Student ID" />
+        </div>
+        <div class="mb-3">
+          <input type="text" class="form-control p-3 shadow-none rounded-pill" id="Fname-form2"
+            placeholder="First name" />
+        </div>
+        <div class="mb-3">
+          <input type="text" class="form-control p-3 shadow-none rounded-pill" id="Lname-form2"
+            placeholder="Last name" />
+        </div>
+        <div class="mb-3">
+          <input type="text" class="form-control p-3 shadow-none rounded-pill" id="email-form2" placeholder="Email" />
+          <div id="email-error" class="text-danger"></div>
+        </div>
+
+        <script>
+          $(document).ready(function () {
+            $('#email-form2').on('blur', function () {
+              var email = $(this).val();
+              var emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+
+              if (!emailRegex.test(email)) {
+                $('#email-error').text('Please enter a valid email address.');
+              } else {
+                $('#email-error').text('');
+              }
+            });
+          });
+        </script>
+
+        <div class="mb-3">
+          <input type="text" class="form-control p-3 shadow-none rounded-pill" id="city-form2" placeholder="NearCity" />
+        </div>
+
+        <div class="mb-3">
+          <select class="form-control p-3 shadow-none rounded-pill" name="Course" id="Course-form2">
+            <option value="HND">HND</option>
+            <option value="Foundation">Foundation</option>
+            <option value="Dgree">Dgree</option>
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <input type="text" class="form-control p-3 shadow-none rounded-pill" id="guardian-form2"
+            placeholder="Guardian" />
+        </div>
+
+        <div class="mb-3">
+          <select class="form-control p-3 shadow-none rounded-pill" name="Course" id="subject-form2">
+            <option value="SE">SE</option>
+            <option value="ORDBMS">ORDBMS</option>
+            <option value="IP">IP</option>
+            <option value="OOP">OOP</option>
+            <option value="HCI">HCI</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <button id="updateBtn" class="btn btn-primary p-3 btn-custom shadow-none rounded-pill w-100">Update</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>
